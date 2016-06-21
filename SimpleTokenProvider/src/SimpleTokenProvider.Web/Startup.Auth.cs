@@ -53,14 +53,13 @@ namespace SimpleTokenProvider.Web
 
         }
 
-        private Task<ClaimsIdentity> GetIdentity(string username, string password)
+        private Task<ClaimsIdentity> GetIdentity(IPrincipal user)
         {
             // Don't do this in production, obviously!
-            if (username == "test" && password == "test")
+            if (user.Identity.IsAuthenticated == false)
             {
-                return Task.FromResult(new ClaimsIdentity(new GenericIdentity(username, "Token"), new Claim[] { }));
+                return Task.FromResult(new ClaimsIdentity(new GenericIdentity("user.Identity.Name", "Token"), new Claim[] { }));
             }
-
             // Credentials are invalid, or account doesn't exist
             return Task.FromResult<ClaimsIdentity>(null);
         }

@@ -4,6 +4,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -65,14 +66,12 @@ namespace SimpleTokenProvider
 
         private async Task GenerateToken(HttpContext context)
         {
-            var username = context.Request.Form["username"];
-            var password = context.Request.Form["password"];
-
-            var identity = await _options.IdentityResolver(username, password);
+            IPrincipal user = context.User;
+            IIdentity identity = await _options.IdentityResolver(user);
             if (identity == null)
             {
                 context.Response.StatusCode = 400;
-                await context.Response.WriteAsync("Invalid username or password.");
+                await context.Response.WriteAsync("Invalid authentication");
                 return;
             }
 
@@ -82,7 +81,8 @@ namespace SimpleTokenProvider
             // You can add other claims here, if you want:
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
+                // @FIXME user.Identity.Name
+                new Claim(JwtRegisteredClaimNames.Sub, "user.Identity.Name"),
                 new Claim(JwtRegisteredClaimNames.Jti, await _options.NonceGenerator()),
                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(now).ToString(), ClaimValueTypes.Integer64)
             };

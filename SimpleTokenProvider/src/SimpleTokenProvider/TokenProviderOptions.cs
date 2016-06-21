@@ -4,6 +4,7 @@
 
 using System;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 
@@ -42,9 +43,9 @@ namespace SimpleTokenProvider
         public SigningCredentials SigningCredentials { get; set; }
 
         /// <summary>
-        /// Resolves a user identity given a username and password.
+        /// Resolves a user identity given an user.
         /// </summary>
-        public Func<string, string, Task<ClaimsIdentity>> IdentityResolver { get; set; }
+        public Func<IPrincipal, Task<ClaimsIdentity>> IdentityResolver { get; set; }
 
         /// <summary>
         /// Generates a random value (nonce) for each generated token.

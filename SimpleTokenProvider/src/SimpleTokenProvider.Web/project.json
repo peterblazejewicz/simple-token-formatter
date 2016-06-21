@@ -42,7 +42,7 @@
     ]
   },
   "tooling": {
-    "defaultNamespace": "SimpleTokenProvider.Test"
+    "defaultNamespace": "SimpleTokenProvider.Web"
   },
   "version": "1.0.0-*"
 }

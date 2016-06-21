@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
 
-namespace SimpleTokenProvider.Test
+namespace SimpleTokenProvider.Web
 {
     public partial class Startup
     {
@@ -32,18 +32,14 @@ namespace SimpleTokenProvider.Test
                 // The signing key must match!
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = signingKey,
-
                 // Validate the JWT Issuer (iss) claim
                 ValidateIssuer = true,
                 ValidIssuer = "ExampleIssuer",
-
                 // Validate the JWT Audience (aud) claim
                 ValidateAudience = true,
                 ValidAudience = "ExampleAudience",
-
                 // Validate the token expiry
                 ValidateLifetime = true,
-                
                 // If you want to allow a certain amount of clock drift, set that here:
                 ClockSkew = TimeSpan.Zero
             };
@@ -55,22 +51,12 @@ namespace SimpleTokenProvider.Test
                 TokenValidationParameters = tokenValidationParameters
             });
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                AuthenticationScheme = "Cookie",
-                CookieName = "access_token",
-                TicketDataFormat = new CustomJwtDataFormat(
-                    SecurityAlgorithms.HmacSha256,
-                    tokenValidationParameters)
-            });
         }
 
         private Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
             // Don't do this in production, obviously!
-            if (username == "TEST" && password == "TEST123")
+            if (username == "test" && password == "test")
             {
                 return Task.FromResult(new ClaimsIdentity(new GenericIdentity(username, "Token"), new Claim[] { }));
             }

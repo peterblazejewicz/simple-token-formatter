@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SimpleTokenProvider.Test.Controllers
+namespace SimpleTokenProvider.Web.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
